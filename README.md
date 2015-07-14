@@ -3,12 +3,13 @@ A Telegram Bot that runs in a raspberry-pi and displays the messages that recive
 
 1) Install telebot lib for python https://github.com/eternnoir/pyTelegramBotAPI
 
-2) Edit the line 56 in Adafuit_CharLCD.py  with your pins 
+2) Edit the line 56 in Adafuit_CharLCD.py   
 
 def __init__(self, pin_rs=?, pin_e=?, pins_db=[?, ?, ?, ?], GPIO=None):  
+
 replace "?" for your GPIO numbers.
 where pins_db = Datapins
 
-3) Put the <TOKEN> of your bot in raspyboy.py (line 9) 
+3) Put the <TOKEN> of your bot in raspybot.py (line 9) 
 
-3) Launch raspybot.py :)
+4) Launch raspybot.py :)
