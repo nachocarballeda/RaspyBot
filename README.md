@@ -11,6 +11,6 @@ def __init__(self, pin_rs=?, pin_e=?, pins_db=[?, ?, ?, ?], GPIO=None):
 replace "?" for your GPIO numbers.
 where pins_db = Datapins
 
-3) Put the TOKEN of your bot in raspybot.py (line 9) 
+3) Put the TOKEN string of your bot in token.py
 
 4) Launch raspybot.py :)

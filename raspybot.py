@@ -1,4 +1,4 @@
-#!/usr/bin/python env
+#!/usr/bin/python 
 
 import urllib3
 import unicodedata
@@ -20,7 +20,7 @@ def listener(messages):
 		chatid = m.chat.id
 		if m.content_type == 'text':
 			text = ascii_ignore(m.text)
-			with open("message.log","a") as log:
+			with open("/home/pi/bots/message.log","a") as log:
 				log.write("Username: " + m.chat.username + " At {0}:{1}:{2} , day {3}/{4}/{5}".format(time.localtime()[3],time.localtime()[4],time.localtime()[5],time.localtime()[2],time.localtime()[1],time.localtime()[0]) + "\n" + text[:50] + "\n\n")
 			text_to_lcd = text + '\n'  + m.chat.username
 			text_to_user = "El mensaje: " + text[:16] + '\n' + "fue enviado con exito !"
@@ -30,25 +30,29 @@ def listener(messages):
 			elif text == '/photo':
 				take_and_send_photo(chatid)
 			elif text == '/log':
-				with  open("message.log","rb") as log:
+				with  open("/home/pi/bots/message.log","rb") as log:
 					tb.send_document(chatid,log)
 			elif text == '/getcode':
-				with  open("raspybot.py","rb") as code:
+				with  open("/home/pi/bots/raspybot.py","rb") as code:
 					tb.send_document(chatid,code)
 			else:
+				
+				with open("/home/pi/bots/lastmessage.log","w") as log:
+					log.write(text[:16] + "\n"+ m.chat.username )
 				if len(text)>16:
 					tb.send_message(chatid,text_to_user2)
 				else:
-					tb.send_message(chatid,text_to_user) 
+					tb.send_message(chatid,text_to_user)
 				to_lcd(text_to_lcd)
+
 def get_temperature():
 	with open("/sys/class/thermal/thermal_zone0/temp") as f:
 		temp = str(int(f.read())/1000)
 	return temp
 
 def take_and_send_photo(chat_id):
-	os.system('fswebcam -r 360x296 --jpeg 85 -D 1 photo.jpg')
-	with open('photo.jpg', 'rb') as photo:
+	os.system('fswebcam -r 360x296 --jpeg 85 -D 1 /home/pi/bots/photo.jpg')
+	with open('/home/pi/bots/photo.jpg', 'rb') as photo:
 		tb.send_photo(chat_id, photo)
 
 def to_lcd(text):
@@ -59,11 +63,11 @@ def to_lcd(text):
 if __name__=='__main__':
 	lcd=Adafruit_CharLCD()
 	lcd.clear()
-	lcd.message("Wellcome \nIm RaspyBot :)")
+	with open("/home/pi/bots/lastmessage.log","r") as log:
+		lcd.message(log.read())
 	tb = telebot.TeleBot(TOKEN)
 	tb.set_update_listener(listener) 
 	tb.polling()
 
 	while True:
 		time.sleep(0.5)
-		pass
